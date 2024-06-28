@@ -1,0 +1,15 @@
+Online Learning Management System
+This project is an Online Learning Management System built using .NET 8 MVC and MySQL. The application allows administrators and users to manage courses, modules, quizzes, and questions.
+
+Features
+User Management: Create, read, update, and delete user information with roles (Admin, Student).
+Course Management: Admins can create and manage courses.
+Module Management: Admins can add and manage modules within courses.
+Quiz Management: Admins can create quizzes for each course module.
+Question Management: Admins can add questions to quizzes with multiple choice options.
+Authentication and Authorization: Role-based access control to ensure only admins can perform certain actions.
+Technologies Used
+.NET 8 MVC: For building the web application.
+MySQL: As the database for storing application data.
+Entity Framework Core: For database interactions.
+Bootstrap: For responsive UI design.
