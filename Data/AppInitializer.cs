@@ -32,8 +32,8 @@ public class AppInitializer
             // Seed Courses
             var courses = new Course[]
             {
-                new Course { CourseName = "Math 101", Description = "Basic Mathematics", Duration = "3 months", InstructorId = users[1].UserId },
-                new Course { CourseName = "Physics 101", Description = "Basic Physics", Duration = "3 months", InstructorId = users[1].UserId }
+                new Course { CourseName = "Math 101", Description = "Basic Mathematics", Category = "Math", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(3), ImageURL = "https://picsum.photos/200/300?random=1", InstructorId = users[1].UserId },
+                new Course { CourseName = "Physics 101", Description = "Basic Physics", Category = "Science", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(3), ImageURL = "https://picsum.photos/200/300?random=2", InstructorId = users[1].UserId }
             };
             foreach (var course in courses)
             {
@@ -41,12 +41,13 @@ public class AppInitializer
             }
             context.SaveChanges();
 
+
             // Seed Modules
             var modules = new Module[]
             {
-                new Module { ModuleName = "Algebra", Content = "Algebra Content", CourseId = courses[0].CourseId },
-                new Module { ModuleName = "Geometry", Content = "Geometry Content", CourseId = courses[0].CourseId },
-                new Module { ModuleName = "Mechanics", Content = "Mechanics Content", CourseId = courses[1].CourseId }
+                new Module { ModuleName = "Algebra", Content = "Algebra Content", ImageURL = "https://picsum.photos/200/300?random=3", CourseId = courses[0].CourseId },
+                new Module { ModuleName = "Geometry", Content = "Geometry Content", ImageURL = "https://picsum.photos/200/300?random=4", CourseId = courses[0].CourseId },
+                new Module { ModuleName = "Mechanics", Content = "Mechanics Content", ImageURL = "https://picsum.photos/200/300?random=5", CourseId = courses[1].CourseId }
             };
             foreach (var module in modules)
             {

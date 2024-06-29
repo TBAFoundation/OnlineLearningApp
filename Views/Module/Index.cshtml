@@ -1,0 +1,50 @@
+﻿@model IEnumerable<OnlineLearningApp.Models.Module>
+
+@{
+    ViewData["Title"] = "Modules";
+}
+<h2>Modules</h2>
+
+<div class="row">
+    @foreach (var module in Model)
+    {
+        <div class="col-md-4 col-xs-6 border-primary mb-3">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-12">
+                        <div class="card-header text-white bg-info">
+                            <p class="card-text">
+                                <h5 class="card-title">
+                                    @module.ModuleName
+                                    @if (User?.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+                                    {
+                                        <a class="text-white float-right" asp-action="Edit" asp-route-id="@module.ModuleId"><i class="bi bi-pencil-square"></i></a>
+                                    }
+                                </h5>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @* Image handling can be added if needed, for now, using a placeholder *@
+                        <img src="https://via.placeholder.com/150" width="100%" alt="@module.ModuleName">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <p class="card-text">@module.Content</p>
+                            @* Include any other module details if needed *@
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card-footer">
+                            <p class="card-text">
+                                <a class="btn btn-outline-primary float-right" asp-action="Details" asp-route-id="@module.ModuleId">
+                                    <i class="bi bi-eye-fill"></i> Show Details
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

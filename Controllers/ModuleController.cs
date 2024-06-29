@@ -13,7 +13,7 @@ public class ModuleController : Controller
     }
     public async Task <IActionResult> Index()
     {
-        var modules = _context.Modules.ToListAsync();
-        return View();
+        var modules = await _context.Modules.ToListAsync();
+        return View(modules);
     }
 }

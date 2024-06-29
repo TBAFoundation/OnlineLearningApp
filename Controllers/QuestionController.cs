@@ -14,7 +14,7 @@ public class QuestionController : Controller
     }
     public async Task<IActionResult> Index()
     {
-        var allQuestions = _context.Questions.ToListAsync();
-        return View();
+        var allQuestions = await _context.Questions.ToListAsync();
+        return View(allQuestions);
     }
 }

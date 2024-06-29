@@ -102,3 +102,4 @@ C:\Users\DELL\Desktop\MGQSC#CLASS\OnlineLearningApp\bin\Debug\net8.0\tr\Microsof
 C:\Users\DELL\Desktop\MGQSC#CLASS\OnlineLearningApp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\DELL\Desktop\MGQSC#CLASS\OnlineLearningApp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\DELL\Desktop\MGQSC#CLASS\OnlineLearningApp\obj\Debug\net8.0\OnlineLe.E1A0974C.Up2Date
+C:\Users\DELL\Desktop\MGQSC#CLASS\OnlineLearningApp\obj\Debug\net8.0\OnlineLearningApp.sourcelink.json

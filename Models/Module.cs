@@ -7,7 +7,8 @@ public class Module
     public int ModuleId { get; set; }
     public string ModuleName { get; set; } = default!;
     public string Content { get; set; } = default!;
-    
+    public string ImageURL { get; set; } = default!;
+
     // Navigation properties
     public int CourseId { get; set; }
     public virtual Course Course { get; set; } = default!;

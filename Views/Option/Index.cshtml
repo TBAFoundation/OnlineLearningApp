@@ -1,0 +1,43 @@
+﻿@model IEnumerable<OnlineLearningApp.Models.Option>
+
+@{
+    ViewData["Title"] = "List of Options";
+}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">List of Options</h2>
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr class="text-center">
+                        <th>@Html.DisplayNameFor(model => model.OptionText)</th>
+                        <th>@Html.DisplayNameFor(model => model.IsCorrect)</th>
+                        <th>@Html.DisplayNameFor(model => model.QuestionId)</th>
+                        @if (User?.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+                        {
+                            <th>Actions</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="text-center">
+                            <td>@Html.DisplayFor(modelItem => item.OptionText)</td>
+                            <td>@Html.DisplayFor(modelItem => item.IsCorrect)</td>
+                            <td>@Html.DisplayFor(modelItem => item.QuestionId)</td>
+                            @if (User?.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+                            {
+                                <td>
+                                    <a class="btn btn-outline-primary btn-sm" asp-action="Edit" asp-route-id="@item.OptionId"><i class="bi bi-pencil-square"></i> Edit</a>
+                                    <a class="btn btn-outline-info btn-sm" asp-action="Details" asp-route-id="@item.OptionId"><i class="bi bi-eye"></i> Details</a>
+                                    <a class="btn btn-danger btn-sm text-white" asp-action="Delete" asp-route-id="@item.OptionId"><i class="bi bi-trash"></i> Delete</a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

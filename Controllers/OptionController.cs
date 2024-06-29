@@ -13,7 +13,7 @@ public class OptionController : Controller
     }
     public async Task<IActionResult> Index()
     {
-        var alloptions = _context.Options.ToListAsync();
-        return View();
+        var allOptions = await _context.Options.ToListAsync();
+        return View(allOptions);
     }
 }

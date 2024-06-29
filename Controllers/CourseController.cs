@@ -13,7 +13,7 @@ public class CourseController : Controller
     }
     public async Task<IActionResult> Index()
     {
-        var allCourses = _context.Courses.ToListAsync();
+        var allCourses = await _context.Courses.ToListAsync();
         return View(allCourses);
     }
 }
