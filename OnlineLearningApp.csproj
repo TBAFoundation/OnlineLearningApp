@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Account\Login.cshtml" />
+    <Content Remove="Views\Account\RegisterCompleted.cshtml" />
+    <Content Remove="Views\Course\Create.cshtml" />
+    <Content Remove="Views\Course\Delete.cshtml" />
+    <Content Remove="Views\Course\Details.cshtml" />
+    <Content Remove="Views\Course\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,7 +25,45 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\ViewModels\" />
+    <UpToDateCheckInput Remove="Views\Course\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Account\Login.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Account\RegisterCompleted.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Course\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Course\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Course\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Course\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Account\Login.cshtml" />
+    <None Include="Views\Account\RegisterCompleted.cshtml" />
+    <None Include="Views\Course\Create.cshtml" />
+    <None Include="Views\Course\Delete.cshtml" />
+    <None Include="Views\Course\Details.cshtml" />
+    <None Include="Views\Course\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Course\Create.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Course\Delete.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Account\Login.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Account\RegisterCompleted.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Course\Details.cshtml" />
   </ItemGroup>
 
 </Project>

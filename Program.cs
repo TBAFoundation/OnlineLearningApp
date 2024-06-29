@@ -1,10 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using OnlineLearningApp;
 using OnlineLearningApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IModuleService, ModuleService>();
+builder.Services.AddScoped<IOptionService, OptionService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<OnlineLearningAppDbContext>(options =>
@@ -45,6 +51,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Course}/{action=Index}/{id?}");
 
 app.Run();

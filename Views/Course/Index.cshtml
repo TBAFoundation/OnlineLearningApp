@@ -4,8 +4,6 @@
     ViewData["Title"] = "Courses";
 }
 
-<h2>Courses</h2>
-
 <div class="row">
     @foreach (var item in Model)
     {
@@ -34,31 +32,30 @@
                             <p class="card-text"><b>Category: </b>@item.Category</p>
                             <p class="card-text"><b>Start Date: </b>@item.StartDate.ToString("dd MMM yy")</p>
                             <p class="card-text"><b>End Date: </b>@item.EndDate.ToString("dd MMM yy")</p>
-                            <p class="card-text ">
+                            <p class="card-text">
                                 <b>Status: </b>
                                 @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate)
                                 {
-                                    <span class="badge bg-success text-white">AVAILABLE</span>
+                                    <span class="badge bg-success text-white">AVAILABLE COURSE</span>
                                 }
                                 else if (DateTime.Now > item.EndDate)
                                 {
-                                    <span class="badge bg-danger text-white">EXPIRED</span>
+                                    <span class="badge bg-danger text-white">ENROLLMENT EXPIRED</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-primary text-white">UPCOMING</span>
+                                    <span class="badge bg-primary text-white">UPCOMING COURSE</span>
                                 }
                             </p>
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <div class="card-footer ">
+                        <div class="card-footer">
                             <p class="card-text">
                                 <a class="btn btn-outline-primary float-right" asp-action="Details" asp-route-id="@item.CourseId">
                                     <i class="bi bi-eye-fill"></i> Show Details
                                 </a>
                                 <a class="btn btn-success text-white @((DateTime.Now > item.EndDate) ? "disabled" : "")" 
-                                    asp-controller="Enrollments" 
                                     asp-action="Enroll" 
                                     asp-route-id="@item.CourseId">
                                 <i class="bi bi-person-plus"></i> Enroll Now</a>
@@ -69,4 +66,4 @@
             </div>
         </div>
     }
-</div>
+</div> 
