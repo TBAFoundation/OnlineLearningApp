@@ -33,7 +33,6 @@
     <_ContentIncludedByDefault Remove="Views\Account\RegisterCompleted.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Course\Create.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Course\Delete.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Course\Details.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Course\Edit.cshtml" />
   </ItemGroup>
 
@@ -60,10 +59,6 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Account\RegisterCompleted.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Course\Details.cshtml" />
   </ItemGroup>
 
 </Project>

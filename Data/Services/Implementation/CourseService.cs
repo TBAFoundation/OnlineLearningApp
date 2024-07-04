@@ -13,25 +13,19 @@ public class CourseService : ICourseService
         _context = context;
     }
 
+    public async Task<Course> GetCourseByIdAsync(int id)
+    {
+        return await _context.Courses.FindAsync(id);
+    }
+
     public async Task<IEnumerable<Course>> GetAllCoursesAsync()
     {
-        return await _context.Courses
-            .Include(c => c.Instructor)
-            .Include(c => c.Modules)
-            .ToListAsync();
+        return await _context.Courses.ToListAsync();
     }
 
-    public async Task<Course?> GetCourseByIdAsync(int id)
+    public async Task CreateCourseAsync(Course course)
     {
-        return await _context.Courses
-            .Include(c => c.Instructor)
-            .Include(c => c.Modules)
-            .FirstOrDefaultAsync(c => c.CourseId == id);
-    }
-
-    public async Task AddCourseAsync(Course course)
-    {
-        _context.Courses.Add(course);
+        await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
     }
 
@@ -46,8 +40,8 @@ public class CourseService : ICourseService
         var course = await _context.Courses.FindAsync(id);
         if (course != null)
         {
-            _context.Courses.Remove(course);
-            await _context.SaveChangesAsync();
+                _context.Courses.Remove(course);
+                await _context.SaveChangesAsync();
+            }
         }
-    }
 }

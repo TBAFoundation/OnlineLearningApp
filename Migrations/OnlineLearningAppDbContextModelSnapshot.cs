@@ -22,6 +22,44 @@ namespace OnlineLearningApp.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("OnlineLearningApp.Models.Account", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("UserId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Accounts");
+                });
+
             modelBuilder.Entity("OnlineLearningApp.Models.Course", b =>
                 {
                     b.Property<int>("CourseId")
@@ -30,9 +68,8 @@ namespace OnlineLearningApp.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("CourseId"));
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
 
                     b.Property<string>("CourseName")
                         .IsRequired()
@@ -49,11 +86,11 @@ namespace OnlineLearningApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Instructor Id")
-                        .HasColumnType("int");
-
                     b.Property<int>("InstructorId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
@@ -79,10 +116,6 @@ namespace OnlineLearningApp.Migrations
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ImageURL")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("ModuleName")
                         .IsRequired()
@@ -168,14 +201,9 @@ namespace OnlineLearningApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("QuizId");
 
                     b.HasIndex("ModuleId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Quizzes");
                 });
@@ -191,51 +219,97 @@ namespace OnlineLearningApp.Migrations
                     b.Property<DateTime>("EnrollmentDate")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("StudentId", "CourseId");
+                    b.HasKey("StudentId");
 
                     b.HasIndex("CourseId");
 
                     b.ToTable("StudentCourses");
                 });
 
-            modelBuilder.Entity("OnlineLearningApp.Models.User", b =>
+            modelBuilder.Entity("OnlineLearningApp.Order", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("UserId"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Email")
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("OnlineLearningApp.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("OnlineLearningApp.ShoppingCartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ShoppingCartId")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                    b.Property<int>("ShoppingCartItemId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.HasKey("Id");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.HasIndex("CourseId");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("varchar(16)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Users");
+                    b.ToTable("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("OnlineLearningApp.Models.Course", b =>
                 {
-                    b.HasOne("OnlineLearningApp.Models.User", "Instructor")
+                    b.HasOne("OnlineLearningApp.Models.Account", "Instructor")
                         .WithMany("Courses")
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -285,10 +359,6 @@ namespace OnlineLearningApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineLearningApp.Models.User", null)
-                        .WithMany("Quizzes")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Module");
                 });
 
@@ -300,7 +370,7 @@ namespace OnlineLearningApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineLearningApp.Models.User", "Student")
+                    b.HasOne("OnlineLearningApp.Models.Account", "Student")
                         .WithMany("StudentCourses")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -309,6 +379,56 @@ namespace OnlineLearningApp.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("OnlineLearningApp.Order", b =>
+                {
+                    b.HasOne("OnlineLearningApp.Models.Account", "Account")
+                        .WithMany("Orders")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("OnlineLearningApp.OrderItem", b =>
+                {
+                    b.HasOne("OnlineLearningApp.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OnlineLearningApp.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("OnlineLearningApp.ShoppingCartItem", b =>
+                {
+                    b.HasOne("OnlineLearningApp.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("OnlineLearningApp.Models.Account", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Orders");
+
+                    b.Navigation("StudentCourses");
                 });
 
             modelBuilder.Entity("OnlineLearningApp.Models.Course", b =>
@@ -333,13 +453,9 @@ namespace OnlineLearningApp.Migrations
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("OnlineLearningApp.Models.User", b =>
+            modelBuilder.Entity("OnlineLearningApp.Order", b =>
                 {
-                    b.Navigation("Courses");
-
-                    b.Navigation("Quizzes");
-
-                    b.Navigation("StudentCourses");
+                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

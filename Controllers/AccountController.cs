@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OnlineLearningApp.Data;
 using OnlineLearningApp.Models;
 
@@ -7,85 +9,101 @@ namespace OnlineLearningApp.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
+    private readonly UserManager<Account> _userManager;
+    private readonly SignInManager<Account> _signInManager;
+    private readonly OnlineLearningAppDbContext _context;
 
-    public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+    public AccountController(UserManager<Account> userManager, SignInManager<Account> signInManager, OnlineLearningAppDbContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _context = context;
     }
 
-    [HttpGet]
-    public IActionResult Login()
+    public async Task<IActionResult> Users()
     {
-        return View();
+        var users = await _context.Accounts.ToListAsync();
+        return View(users);
     }
+
+
+    public IActionResult Login() => View(new LoginViewModel());
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginViewModel loginVM)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid) return View(loginVM);
+
+        var user = await _userManager.FindByEmailAsync(loginVM.EmailAddress);
+        if(user != null)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
-
-            if (result.Succeeded)
+            var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+            if (passwordCheck)
             {
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-            }
-        }
-        return View(model);
-    }
-
-    [HttpGet]
-    public IActionResult Register()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Register(RegisterViewModel model)
-    {
-        if (ModelState.IsValid)
-        {
-            var user = new User
-            {
-                Username = model.Username,
-                Email = model.Email,
-                FullName = model.Username // Assuming FullName is same as Username for simplicity
-            };
-
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("RegisterCompleted");
-            }
-            else
-            {
-                foreach (var error in result.Errors)
+                var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
+                if (result.Succeeded)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    return RedirectToAction("Index", "Movies");
                 }
             }
+            TempData["Error"] = "Wrong credentials. Please, try again!";
+            return View(loginVM);
         }
-        return View(model);
+
+        TempData["Error"] = "Wrong credentials. Please, try again!";
+        return View(loginVM);
     }
 
-    [HttpGet]
-    public IActionResult RegisterCompleted()
+
+    public IActionResult Register() => View(new RegisterViewModel());
+
+    [HttpPost]
+    public async Task<IActionResult> Register(RegisterViewModel registerVM)
+    {
+        if (!ModelState.IsValid) return View(registerVM);
+
+        var user = await _userManager.FindByEmailAsync(registerVM.EmailAddress);
+        if(user != null)
+        {
+            TempData["Error"] = "This email address is already in use";
+            return View(registerVM);
+        }
+
+        var newUser = new Account()
+        {
+            FullName = registerVM.FullName,
+            Email = registerVM.EmailAddress,
+            Username = registerVM.EmailAddress
+        };
+        var newUserResponse = await _userManager.CreateAsync(newUser, registerVM.Password);
+
+        if (newUserResponse.Succeeded)
+        {
+            var roles = new List<string> { UserRoles.Admin, UserRoles.Instructor, UserRoles.Student };
+            await _userManager.AddToRolesAsync(newUser, roles);
+
+            await _signInManager.SignInAsync(newUser, isPersistent: false);
+            return RedirectToAction("Index", "Home");
+        }
+
+        foreach (var error in newUserResponse.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+
+        return View(registerVM);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Course");
+    }
+
+    public IActionResult AccessDenied(string ReturnUrl)
     {
         return View();
     }
 
-    [HttpGet]
-    public IActionResult AccessDenied()
-    {
-        return View();
-    }
 }

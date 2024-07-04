@@ -10,30 +10,32 @@ public class AppInitializer
         using (var context = new OnlineLearningAppDbContext(
             serviceProvider.GetRequiredService<DbContextOptions<OnlineLearningAppDbContext>>()))
         {
-            // Look for any users.
-            if (context.Users.Any())
+            if (context.Accounts.Any())
             {
                 return;   // DB has been seeded
             }
 
-            // Seed Users
-            var users = new User[]
+            // Seed Accounts
+            var accounts = new Account[]
             {
-                new User { Username = "admin", Password = "admin123", FullName = "Administrator", Email = "admin@example.com", Role = "Admin" },
-                new User { Username = "teacher1", Password = "teacher123", FullName = "Teacher One", Email = "teacher1@example.com", Role = "Instructor" },
-                new User { Username = "student1", Password = "student123", FullName = "Student One", Email = "student1@example.com", Role = "Student" }
+                new Account { Username = "admin", PasswordHash = "admin123", FullName = "Administrator", Email = "admin@example.com", Role = UserRoles.Admin },
+                new Account { Username = "teacher1", PasswordHash = "teacher123", FullName = "Teacher One", Email = "teacher1@example.com", Role = UserRoles.Instructor },
+                new Account { Username = "student1", PasswordHash = "student123", FullName = "Student One", Email = "student1@example.com", Role = UserRoles.Student }
             };
-            foreach (var user in users)
+            foreach (var account in accounts)
             {
-                context.Users.Add(user);
+                context.Accounts.Add(account);
             }
             context.SaveChanges();
 
             // Seed Courses
             var courses = new Course[]
             {
-                new Course { CourseName = "Math 101", Description = "Basic Mathematics", Category = "Math", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(3), ImageURL = "https://picsum.photos/200/300?random=1", InstructorId = users[1].UserId },
-                new Course { CourseName = "Physics 101", Description = "Basic Physics", Category = "Science", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(3), ImageURL = "https://picsum.photos/200/300?random=2", InstructorId = users[1].UserId }
+                new Course { CourseName = "Data Science 101", Description = "Introduction to Data Science", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(3), Price = 500m, Category = CourseCategory.DataScience, ImageURL = "datascience101.jpg", InstructorId = accounts[1].UserId },
+                new Course { CourseName = "AI Fundamentals", Description = "Basics of AI", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(3), Price = 700m, Category = CourseCategory.AI, ImageURL = "aifundamentals.jpg", InstructorId = accounts[1].UserId },
+                new Course { CourseName = "Programming with Python", Description = "Learn Python from scratch", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(2), Price = 400m, Category = CourseCategory.Programming, ImageURL = "pythonprogramming.jpg", InstructorId = accounts[1].UserId },
+                new Course { CourseName = "Machine Learning Basics", Description = "Introduction to Machine Learning", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(4), Price = 600m, Category = CourseCategory.MachineLearning, ImageURL = "mlbasics.jpg", InstructorId = accounts[1].UserId },
+                new Course { CourseName = "Advanced Data Science", Description = "Advanced topics in Data Science", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(5), Price = 800m, Category = CourseCategory.DataScience, ImageURL = "advanced_datascience.jpg", InstructorId = accounts[1].UserId }
             };
             foreach (var course in courses)
             {
@@ -41,13 +43,19 @@ public class AppInitializer
             }
             context.SaveChanges();
 
-
             // Seed Modules
             var modules = new Module[]
             {
-                new Module { ModuleName = "Algebra", Content = "Algebra Content", ImageURL = "https://picsum.photos/200/300?random=3", CourseId = courses[0].CourseId },
-                new Module { ModuleName = "Geometry", Content = "Geometry Content", ImageURL = "https://picsum.photos/200/300?random=4", CourseId = courses[0].CourseId },
-                new Module { ModuleName = "Mechanics", Content = "Mechanics Content", ImageURL = "https://picsum.photos/200/300?random=5", CourseId = courses[1].CourseId }
+                new Module { ModuleName = "Introduction to Data Science", Content = "Content for Introduction to Data Science", CourseId = courses[0].CourseId },
+                new Module { ModuleName = "Data Science Tools", Content = "Content for Data Science Tools", CourseId = courses[0].CourseId },
+                new Module { ModuleName = "Introduction to AI", Content = "Content for Introduction to AI", CourseId = courses[1].CourseId },
+                new Module { ModuleName = "AI Techniques", Content = "Content for AI Techniques", CourseId = courses[1].CourseId },
+                new Module { ModuleName = "Getting Started with Python", Content = "Content for Getting Started with Python", CourseId = courses[2].CourseId },
+                new Module { ModuleName = "Python Advanced Topics", Content = "Content for Python Advanced Topics", CourseId = courses[2].CourseId },
+                new Module { ModuleName = "Basics of Machine Learning", Content = "Content for Basics of Machine Learning", CourseId = courses[3].CourseId },
+                new Module { ModuleName = "Machine Learning Algorithms", Content = "Content for Machine Learning Algorithms", CourseId = courses[3].CourseId },
+                new Module { ModuleName = "Advanced Data Science Techniques", Content = "Content for Advanced Data Science Techniques", CourseId = courses[4].CourseId },
+                new Module { ModuleName = "Data Science Case Studies", Content = "Content for Data Science Case Studies", CourseId = courses[4].CourseId }
             };
             foreach (var module in modules)
             {
@@ -58,9 +66,8 @@ public class AppInitializer
             // Seed Quizzes
             var quizzes = new Quiz[]
             {
-                new Quiz { QuizName = "Algebra Quiz", Description = "Quiz on Algebra", DateCreated = DateTime.Now, ModuleId = modules[0].ModuleId },
-                new Quiz { QuizName = "Geometry Quiz", Description = "Quiz on Geometry", DateCreated = DateTime.Now, ModuleId = modules[1].ModuleId },
-                new Quiz { QuizName = "Mechanics Quiz", Description = "Quiz on Mechanics", DateCreated = DateTime.Now, ModuleId = modules[2].ModuleId }
+                new Quiz { QuizName = "Data Science Basics Quiz", Description = "Quiz on Data Science Basics", DateCreated = DateTime.Now, ModuleId = modules[0].ModuleId },
+                new Quiz { QuizName = "AI Basics Quiz", Description = "Quiz on AI Basics", DateCreated = DateTime.Now, ModuleId = modules[2].ModuleId }
             };
             foreach (var quiz in quizzes)
             {
@@ -71,9 +78,8 @@ public class AppInitializer
             // Seed Questions
             var questions = new Question[]
             {
-                new Question { QuestionText = "What is 2 + 2?", QuestionType = "Multiple Choice", QuizId = quizzes[0].QuizId },
-                new Question { QuestionText = "What is the area of a circle?", QuestionType = "Multiple Choice", QuizId = quizzes[1].QuizId },
-                new Question { QuestionText = "What is Newton's second law?", QuestionType = "Multiple Choice", QuizId = quizzes[2].QuizId }
+                new Question { QuestionText = "What is Data Science?", QuestionType = "Multiple Choice", QuizId = quizzes[0].QuizId },
+                new Question { QuestionText = "What is AI?", QuestionType = "Multiple Choice", QuizId = quizzes[1].QuizId }
             };
             foreach (var question in questions)
             {
@@ -84,16 +90,47 @@ public class AppInitializer
             // Seed Options
             var options = new Option[]
             {
-                new Option { OptionText = "4", IsCorrect = true, QuestionId = questions[0].QuestionId },
-                new Option { OptionText = "5", IsCorrect = false, QuestionId = questions[0].QuestionId },
-                new Option { OptionText = "πr²", IsCorrect = true, QuestionId = questions[1].QuestionId },
-                new Option { OptionText = "2πr", IsCorrect = false, QuestionId = questions[1].QuestionId },
-                new Option { OptionText = "F = ma", IsCorrect = true, QuestionId = questions[2].QuestionId },
-                new Option { OptionText = "E = mc²", IsCorrect = false, QuestionId = questions[2].QuestionId }
+                new Option { OptionText = "A field of study", IsCorrect = true, QuestionId = questions[0].QuestionId },
+                new Option { OptionText = "A field of study", IsCorrect = true, QuestionId = questions[1].QuestionId }
             };
             foreach (var option in options)
             {
                 context.Options.Add(option);
+            }
+            context.SaveChanges();
+
+            // Seed Orders
+            var orders = new Order[]
+            {
+                new Order {Id = accounts[2].UserId, OrderDate = DateTime.Now, TotalAmount = 1200m }
+            };
+            foreach (var order in orders)
+            {
+                context.Orders.Add(order);
+            }
+            context.SaveChanges();
+
+            // Seed OrderItems
+            var orderItems = new OrderItem[]
+            {
+                new OrderItem { OrderId = orders[0].Id, CourseId = courses[0].CourseId, Quantity = 1, Price = courses[0].Price },
+                new OrderItem { OrderId = orders[0].Id, CourseId = courses[1].CourseId, Quantity = 1, Price = courses[1].Price }
+            };
+            foreach (var orderItem in orderItems)
+            {
+                context.OrderItems.Add(orderItem);
+            }
+            context.SaveChanges();
+
+            // Seed ShoppingCartItems
+            var shoppingCartItems = new ShoppingCartItem[]
+            {
+                new ShoppingCartItem { ShoppingCartId = Guid.NewGuid().ToString(), Course = courses[0], Amount = 1 },
+                new ShoppingCartItem { ShoppingCartId = Guid.NewGuid().ToString(), Course = courses[1], Amount = 1 }
+            };
+            foreach (var shoppingCartItem in shoppingCartItems)
+            {
+                context.ShoppingCartItems.Add(shoppingCartItem);
             }
             context.SaveChanges();
         }

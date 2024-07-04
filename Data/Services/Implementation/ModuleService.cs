@@ -13,23 +13,19 @@ public class ModuleService : IModuleService
         _context = context;
     }
 
+    public async Task<Module> GetModuleByIdAsync(int id)
+    {
+        return await _context.Modules.FindAsync(id);
+    }
+
     public async Task<IEnumerable<Module>> GetAllModulesAsync()
     {
-        return await _context.Modules
-            .Include(m => m.Course)
-            .ToListAsync();
+        return await _context.Modules.ToListAsync();
     }
 
-    public async Task<Module?> GetModuleByIdAsync(int id)
+    public async Task CreateModuleAsync(Module module)
     {
-        return await _context.Modules
-            .Include(m => m.Course)
-            .FirstOrDefaultAsync(m => m.ModuleId == id);
-    }
-
-    public async Task AddModuleAsync(Module module)
-    {
-        _context.Modules.Add(module);
+        await _context.Modules.AddAsync(module);
         await _context.SaveChangesAsync();
     }
 
