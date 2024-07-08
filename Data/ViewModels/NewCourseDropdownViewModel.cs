@@ -1,4 +1,5 @@
-﻿namespace OnlineLearningApp;
+﻿
+namespace OnlineLearningApp;
 
 public class NewCourseDropdownViewModel
 {

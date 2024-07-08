@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineLearningApp.Data;
 using OnlineLearningApp.Models;
@@ -18,133 +19,104 @@ public class CourseController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
-        var allCourses = await _service.GetAllCoursesAsync();
+        var allCourses = await _service.GetAllAsync(n => n.Category);
         return View(allCourses);
     }
 
-    public IActionResult Create()
+    [AllowAnonymous]
+    public async Task<IActionResult> Filter(string searchString)
     {
-        var dropdowns = new NewCourseDropdownViewModel
-        {
-            Instructors = _context.Users.ToList(),
-            Categories = _context.Categories.Select(c => c.Name).ToList()
-        };
-        var viewModel = new NewCourseViewModel
-        {
-            Instructors = dropdowns.Instructors,
-            Categories = dropdowns.Categories
-        };
-        return View(viewModel);
-    }
+        var allCourses = await _service.GetAllAsync(n => n.Category);
 
-    [HttpPost]
-    public async Task<IActionResult> Create(NewCourseViewModel model)
-    {
-        if (ModelState.IsValid)
+        if (!string.IsNullOrEmpty(searchString))
         {
-            var newCourse = new Course
-            {
-                CourseName = model.CourseName,
-                Description = model.Description,
-                Category = model.Category,
-                StartDate = model.StartDate,
-                EndDate = model.EndDate,
-                ImageURL = model.ImageURL,
-                InstructorId = model.InstructorId
-            };
-            _context.Courses.Add(newCourse);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            var filteredResultNew = allCourses.Where(n => string.Equals(n.CourseName, searchString, System.StringComparison.CurrentCultureIgnoreCase) || string.Equals(n.Description, searchString, System.StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+            return View("Index", filteredResultNew);
         }
 
-        var dropdowns = new NewCourseDropdownViewModel
-        {
-            Instructors = _context.Users.ToList(),
-            Categories = _context.Categories.Select(c => c.Name).ToList()
-        };
-        model.Instructors = dropdowns.Instructors;
-        model.Categories = dropdowns.Categories;
-        return View(model);
+        return View("Index", allCourses);
     }
 
-    public async Task<IActionResult> Edit(int id)
-    {
-        var course = await _context.Courses.FindAsync(id);
-        if (course == null)
-        {
-            return NotFound();
-        }
-
-        var viewModel = new NewCourseViewModel
-        {
-            CourseName = course.CourseName,
-            Description = course.Description,
-            Category = course.Category,
-            StartDate = course.StartDate,
-            EndDate = course.EndDate,
-            ImageURL = course.ImageURL,
-            InstructorId = course.InstructorId,
-            Instructors = _context.Users.ToList(),
-            Categories = _context.Categories.Select(c => c.Name).ToList()
-        };
-        return View(viewModel);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Edit(int id, NewCourseViewModel model)
-    {
-        if (ModelState.IsValid)
-        {
-            var course = await _context.Courses.FindAsync(id);
-            if (course == null)
-            {
-                return NotFound();
-            }
-
-            course.CourseName = model.CourseName;
-            course.Description = model.Description;
-            course.Category = model.Category;
-            course.StartDate = model.StartDate;
-            course.EndDate = model.EndDate;
-            course.ImageURL = model.ImageURL;
-            course.InstructorId = model.InstructorId;
-
-            _context.Update(course);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-
-        var dropdowns = new NewCourseDropdownViewModel
-        {
-            Instructors = _context.Users.ToList(),
-            Categories = _context.Categories.Select(c => c.Name).ToList()
-        };
-        model.Instructors = dropdowns.Instructors;
-        model.Categories = dropdowns.Categories;
-        return View(model);
-    }
-
+    // GET: Courses/Details/1
+    [AllowAnonymous]
     public async Task<IActionResult> Details(int id)
     {
-        var course = await _context.Courses.Include(c => c.Instructor).FirstOrDefaultAsync(c => c.CourseId == id);
-        if (course == null)
-        {
-            return NotFound();
-        }
-
-        return View(course);
+        var courseDetail = await _service.GetCourseByIdAsync(id);
+        return View(courseDetail);
     }
 
-    public async Task<IActionResult> Delete(int id)
+    // GET: Courses/Create
+    public async Task<IActionResult> Create()
     {
-        var course = await _context.Courses.FindAsync(id);
-        if (course == null)
+        var courseDropdownsData = await _service.GetNewCourseDropdownsValues();
+
+        ViewBag.Categories = new SelectList(courseDropdownsData.Categories, "Id", "Name");
+        ViewBag.Instructors = new SelectList(courseDropdownsData.Instructors, "Id", "FullName");
+
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(NewCourseViewModel course)
+    {
+        if (!ModelState.IsValid)
         {
-            return NotFound();
+            var courseDropdownsData = await _service.GetNewCourseDropdownsValues();
+
+            ViewBag.Categories = new SelectList(courseDropdownsData.Categories, "Id", "Name");
+            ViewBag.Instructors = new SelectList(courseDropdownsData.Instructors, "Id", "FullName");
+
+            return View(course);
         }
 
-        _context.Courses.Remove(course);
-        await _context.SaveChangesAsync();
-        return RedirectToAction("Index");
+        await _service.AddNewCourseAsync(course);
+        return RedirectToAction(nameof(Index));
+    }
+
+    // GET: Courses/Edit/1
+    public async Task<IActionResult> Edit(int id)
+    {
+        var courseDetails = await _service.GetCourseByIdAsync(id);
+        if (courseDetails == null) return View("NotFound");
+
+        var response = new NewCourseViewModel()
+        {
+            Id = courseDetails.Id,
+            CourseName = courseDetails.CourseName,
+            Description = courseDetails.Description,
+            Price = courseDetails.Price,
+            StartDate = courseDetails.StartDate,
+            EndDate = courseDetails.EndDate,
+            ImageURL = courseDetails.ImageURL,
+            Category = courseDetails.Category,
+            InstructorId = courseDetails.InstructorId,
+            ModuleIds = courseDetails.Courses_Modules.Select(n => n.ModuleId).ToList(),
+        };
+
+        var courseDropdownsData = await _service.GetNewCourseDropdownsValues();
+        ViewBag.Categories = new SelectList(courseDropdownsData.Categories, "Id", "Name");
+        ViewBag.Instructors = new SelectList(courseDropdownsData.Instructors, "Id", "FullName");
+
+        return View(response);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(int id, NewCourseViewModel course)
+    {
+        if (id != course.Id) return View("NotFound");
+
+        if (!ModelState.IsValid)
+        {
+            var courseDropdownsData = await _service.GetNewCourseDropdownsValues();
+
+            ViewBag.Categories = new SelectList(courseDropdownsData.Categories, "Id", "Name");
+            ViewBag.Instructors = new SelectList(courseDropdownsData.Instructors, "Id", "FullName");
+
+            return View(course);
+        }
+
+        await _service.UpdateCourseAsync(course);
+        return RedirectToAction(nameof(Index));
     }
 }

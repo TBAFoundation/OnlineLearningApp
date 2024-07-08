@@ -2,11 +2,10 @@
 
 namespace OnlineLearningApp;
 
-public interface ICourseService
+public interface ICourseService : IEntityBaseRepository<Course>
 {
     Task<Course> GetCourseByIdAsync(int id);
-    Task<IEnumerable<Course>> GetAllCoursesAsync();
-    Task CreateCourseAsync(Course course);
-    Task UpdateCourseAsync(Course course);
-    Task DeleteCourseAsync(int id);
+    Task<NewCourseDropdownViewModel> GetNewCourseDropdownsValues();
+    Task AddNewCourseAsync(NewCourseViewModel data);
+    Task UpdateCourseAsync(NewCourseViewModel data);
 }

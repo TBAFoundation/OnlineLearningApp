@@ -3,9 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineLearningApp.Models;
 
-public class Course
+public class Course : IEntityBase
 {
     [Key]
+    public int Id { get; set; }
     public int CourseId { get; set; }
     public string CourseName { get; set; } = default!;
     public string Description { get; set; } = default!;
@@ -15,10 +16,12 @@ public class Course
     public decimal Price { get; set; }
     public string ImageURL { get; set; } = default!;
 
+
     // Navigation properties
     public virtual ICollection<Module> Modules { get; set; } = new List<Module>();
     public virtual ICollection<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
     public int InstructorId { get; set; }
     [ForeignKey("InstructorId")]
     public virtual Account Instructor { get; set; } = default!;
+    public ICollection<Course_Module> Courses_Modules { get; set; } = new List<Course_Module>();
 }

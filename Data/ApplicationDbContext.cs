@@ -9,6 +9,7 @@ public class OnlineLearningAppDbContext : DbContext
     }
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Course> Courses { get; set; }
+    public DbSet<Course_Module> Courses_Modules { get; set; }
     public DbSet<Module> Modules { get; set; }
     public DbSet<Option> Options { get; set; }
     public DbSet<Order> Orders { get; set; }
@@ -40,6 +41,16 @@ public class OnlineLearningAppDbContext : DbContext
             .HasOne(c => c.Instructor)
             .WithMany(a => a.Courses)
             .HasForeignKey(c => c.InstructorId);
+
+        modelBuilder.Entity<Course_Module>()
+            .HasOne(cm => cm.Course)
+            .WithMany(c => c.Courses_Modules)
+            .HasForeignKey(cm => cm.CourseId);
+
+        modelBuilder.Entity<Course_Module>()
+            .HasOne(cm => cm.Module)
+            .WithMany(m => m.Courses_Modules)
+            .HasForeignKey(cm => cm.ModuleId);
 
         modelBuilder.Entity<OrderItem>()
             .HasOne(oi => oi.Order)
