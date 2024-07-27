@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DELL\\Desktop\\MGQSC#CLASS\\OnlineLearningApp\\OnlineLearningApp.csproj": {}
+    "C:\\Users\\USER\\Desktop\\MGQS Projects\\OnlineLearningApp\\OnlineLearningApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DELL\\Desktop\\MGQSC#CLASS\\OnlineLearningApp\\OnlineLearningApp.csproj": {
+    "C:\\Users\\USER\\Desktop\\MGQS Projects\\OnlineLearningApp\\OnlineLearningApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DELL\\Desktop\\MGQSC#CLASS\\OnlineLearningApp\\OnlineLearningApp.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\MGQS Projects\\OnlineLearningApp\\OnlineLearningApp.csproj",
         "projectName": "OnlineLearningApp",
-        "projectPath": "C:\\Users\\DELL\\Desktop\\MGQSC#CLASS\\OnlineLearningApp\\OnlineLearningApp.csproj",
-        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DELL\\Desktop\\MGQSC#CLASS\\OnlineLearningApp\\obj\\",
+        "projectPath": "C:\\Users\\USER\\Desktop\\MGQS Projects\\OnlineLearningApp\\OnlineLearningApp.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\MGQS Projects\\OnlineLearningApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -52,13 +52,17 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.6, )"
+              "version": "[8.0.7, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.6, )"
+              "version": "[8.0.7, )"
+            },
+            "MySql.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.5, )"
             },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
@@ -84,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

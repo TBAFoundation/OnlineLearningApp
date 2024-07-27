@@ -27,7 +27,14 @@ public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class,
 
     public async Task<T> GetByIdAsync(int id)
     {
-        return await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
+        var entity = await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
+        if (entity == null)
+        {
+            // Handle the case where the entity is not found
+            // You can return a default value or throw an exception
+            throw new Exception($"Entity with id {id} not found.");
+        }
+        return entity;
     }
 
     public async Task AddAsync(T entity)

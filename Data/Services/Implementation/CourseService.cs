@@ -45,7 +45,6 @@ public class CourseService : EntityBaseRepository<Course>, ICourseService
     public async Task<Course> GetCourseByIdAsync(int id)
     {
         var courseDetails = await _context.Courses
-            .Include(c => c.Category)
             .Include(i => i.Instructor)
             .Include(cm => cm.Courses_Modules).ThenInclude(m => m.Module)
             .FirstOrDefaultAsync(n => n.Id == id);
@@ -63,10 +62,10 @@ public class CourseService : EntityBaseRepository<Course>, ICourseService
             FullName = a.FullName
         }).ToList();
 
-        var categories = await _context.Courses
-                                        .OrderBy(n => n.Category)        
-                                        .Select(c => c.CourseName)
-                                        .ToListAsync();
+        var categories = Enum.GetValues(typeof(CourseCategory))
+                        .Cast<CourseCategory>()
+                        .Select(c => c.GetDescription()) // Convert to string descriptions
+                        .ToList();
 
         var response = new NewCourseDropdownViewModel
         {

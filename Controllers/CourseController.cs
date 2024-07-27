@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using OnlineLearningApp.Data;
-using OnlineLearningApp.Models;
 
 namespace OnlineLearningApp.Controllers;
 [Authorize(Roles = UserRoles.Admin)]
@@ -19,7 +16,7 @@ public class CourseController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
-        var allCourses = await _service.GetAllAsync(n => n.Category);
+        var allCourses = await _service.GetAllAsync();
         return View(allCourses);
     }
 

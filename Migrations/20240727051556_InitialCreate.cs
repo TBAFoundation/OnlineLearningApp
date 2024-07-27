@@ -42,8 +42,9 @@ namespace OnlineLearningApp.Migrations
                 name: "Courses",
                 columns: table => new
                 {
-                    CourseId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
                     CourseName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: false)
@@ -58,7 +59,7 @@ namespace OnlineLearningApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.CourseId);
+                    table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Courses_Accounts_InstructorId",
                         column: x => x.InstructorId,
@@ -109,7 +110,7 @@ namespace OnlineLearningApp.Migrations
                         name: "FK_Modules_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "CourseId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -133,7 +134,7 @@ namespace OnlineLearningApp.Migrations
                         name: "FK_ShoppingCartItems_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "CourseId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -159,7 +160,7 @@ namespace OnlineLearningApp.Migrations
                         name: "FK_StudentCourses_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "CourseId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -182,13 +183,40 @@ namespace OnlineLearningApp.Migrations
                         name: "FK_OrderItems_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "CourseId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Courses_Modules",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    ModuleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses_Modules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Courses_Modules_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Courses_Modules_Modules_ModuleId",
+                        column: x => x.ModuleId,
+                        principalTable: "Modules",
+                        principalColumn: "ModuleId",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -271,6 +299,16 @@ namespace OnlineLearningApp.Migrations
                 column: "InstructorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Courses_Modules_CourseId",
+                table: "Courses_Modules",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_Modules_ModuleId",
+                table: "Courses_Modules",
+                column: "ModuleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Modules_CourseId",
                 table: "Modules",
                 column: "CourseId");
@@ -319,6 +357,9 @@ namespace OnlineLearningApp.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Courses_Modules");
+
             migrationBuilder.DropTable(
                 name: "Options");
 
