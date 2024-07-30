@@ -1,39 +1,95 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OnlineLearningApp.Data;
 using OnlineLearningApp.Models;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace OnlineLearningApp;
+namespace OnlineLearningApp.Data.Cart;
 
 public class ShoppingCart
 {
-    private readonly IShoppingCartService _shoppingCartService;
-    public ShoppingCart(IShoppingCartService shoppingCartService)
+    private readonly OnlineLearningAppDbContext _context;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ISession _session;
+
+    public string ShoppingCartId { get; set; }
+    public List<ShoppingCartItem> ShoppingCartItems { get; set; } = new List<ShoppingCartItem>();
+
+    public ShoppingCart(OnlineLearningAppDbContext context, IHttpContextAccessor httpContextAccessor)
     {
-        _shoppingCartService = shoppingCartService;
+        _context = context;
+        _httpContextAccessor = httpContextAccessor;
+        _session = _httpContextAccessor.HttpContext!.Session;
+        ShoppingCartId = _session.GetString("CartId") ?? Guid.NewGuid().ToString();
+        _session.SetString("CartId", ShoppingCartId);
     }
 
-    public void AddItemToCart(Course course)
+    public static ShoppingCart GetShoppingCart(IServiceProvider services)
     {
-        _shoppingCartService.AddItemToCart(course);
+        var context = services.GetRequiredService<OnlineLearningAppDbContext>();
+        var httpContextAccessor = services.GetRequiredService<IHttpContextAccessor>();
+        return new ShoppingCart(context, httpContextAccessor);
     }
 
-    public void RemoveItemFromCart(Course course)
+    public async Task AddItemToCartAsync(Course course)
     {
-        _shoppingCartService.RemoveItemFromCart(course);
+        var shoppingCartItem = await _context.ShoppingCartItems.FirstOrDefaultAsync(n => n.Course.Id == course.Id && n.ShoppingCartId == ShoppingCartId);
+
+        if (shoppingCartItem == null)
+        {
+            shoppingCartItem = new ShoppingCartItem()
+            {
+                ShoppingCartId = ShoppingCartId,
+                Course = course,
+                Amount = 1
+            };
+
+            await _context.ShoppingCartItems.AddAsync(shoppingCartItem);
+        }
+        else
+        {
+            shoppingCartItem.Amount++;
+        }
+        await _context.SaveChangesAsync();
     }
 
-    public List<ShoppingCartItem> GetShoppingCartItems()
+    public async Task RemoveItemFromCartAsync(Course course)
     {
-        return _shoppingCartService.GetShoppingCartItems();
+        var shoppingCartItem = await _context.ShoppingCartItems.FirstOrDefaultAsync(n => n.Course.Id == course.Id && n.ShoppingCartId == ShoppingCartId);
+
+        if (shoppingCartItem != null)
+        {
+            if (shoppingCartItem.Amount > 1)
+            {
+                shoppingCartItem.Amount--;
+            }
+            else
+            {
+                _context.ShoppingCartItems.Remove(shoppingCartItem);
+            }
+        }
+        await _context.SaveChangesAsync();
     }
 
-    public decimal GetShoppingCartTotal()
+    public async Task<List<ShoppingCartItem>> GetShoppingCartItemsAsync()
     {
-        return _shoppingCartService.GetShoppingCartTotal();
+        ShoppingCartItems = await _context.ShoppingCartItems
+            .Where(n => n.ShoppingCartId == ShoppingCartId)
+            .Include(n => n.Course)
+            .ToListAsync();
+        return ShoppingCartItems;
     }
 
-    public Task ClearShoppingCartAsync()
+    public async Task<decimal> GetShoppingCartTotalAsync()
     {
-        return _shoppingCartService.ClearShoppingCartAsync();
+        return await _context.ShoppingCartItems
+            .Where(n => n.ShoppingCartId == ShoppingCartId)
+            .Select(n => n.Course.Price * n.Amount)
+            .SumAsync();
+    }
+
+    public async Task ClearShoppingCartAsync()
+    {
+        var items = await _context.ShoppingCartItems.Where(n => n.ShoppingCartId == ShoppingCartId).ToListAsync();
+        _context.ShoppingCartItems.RemoveRange(items);
+        await _context.SaveChangesAsync();
     }
 }

@@ -99,10 +99,4 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Index", "Course");
     }
-
-    public IActionResult AccessDenied(string ReturnUrl)
-    {
-        return View();
-    }
-
 }

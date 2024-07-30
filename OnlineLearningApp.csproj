@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Services\Implementation\ShoppingCartService.cs" />
+    <Compile Remove="Data\Services\Interface\IShoppingCartService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Account\Login.cshtml" />
     <Content Remove="Views\Account\RegisterCompleted.cshtml" />
     <Content Remove="Views\Course\Create.cshtml" />
@@ -16,6 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,6 +30,7 @@
     </PackageReference>
     <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +52,7 @@
     <None Include="Views\Course\Delete.cshtml" />
     <None Include="Views\Course\Details.cshtml" />
     <None Include="Views\Course\Edit.cshtml" />
+    <None Include="Views\Shared\Components\ShoppingCartSummary\Default.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

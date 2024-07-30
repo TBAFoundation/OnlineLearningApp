@@ -2,11 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using OnlineLearningApp.Models;
 
 namespace OnlineLearningApp.Data;
+
 public class OnlineLearningAppDbContext : DbContext
 {
     public OnlineLearningAppDbContext(DbContextOptions<OnlineLearningAppDbContext> options) : base(options)
     {
     }
+
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Course> Courses { get; set; }
     public DbSet<Course_Module> Courses_Modules { get; set; }
@@ -18,14 +20,22 @@ public class OnlineLearningAppDbContext : DbContext
     public DbSet<Question> Questions { get; set; }
     public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
     public DbSet<StudentCourse> StudentCourses { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<StudentCourse>()
-            .HasOne(sc => sc.Student)
-            .WithMany(a => a.StudentCourses)
-            .HasForeignKey(sc => sc.StudentId);
+             .HasOne(sc => sc.Student)
+             .WithMany(a => a.StudentCourses)
+             .HasForeignKey(sc => sc.StudentId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<StudentCourse>()
+            .HasOne(sc => sc.Course)
+            .WithMany(c => c.StudentCourses)
+            .HasForeignKey(sc => sc.CourseId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Account>()
             .HasMany(a => a.Courses)
@@ -51,6 +61,11 @@ public class OnlineLearningAppDbContext : DbContext
             .HasOne(cm => cm.Module)
             .WithMany(m => m.Courses_Modules)
             .HasForeignKey(cm => cm.ModuleId);
+
+        modelBuilder.Entity<Order>()
+           .HasOne(o => o.Account)
+           .WithMany(a => a.Orders)
+           .HasForeignKey(o => o.AccountId);
 
         modelBuilder.Entity<OrderItem>()
             .HasOne(oi => oi.Order)

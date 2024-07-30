@@ -1,26 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineLearningApp.Data.Cart;
+using System.Threading.Tasks;
+using OnlineLearningApp.Models;
 
 namespace OnlineLearningApp;
 
 public class ShoppingCartSummary : ViewComponent
 {
-    private readonly IShoppingCartService _shoppingCartService;
+    private readonly ShoppingCart _shoppingCart;
 
-    public ShoppingCartSummary(IShoppingCartService shoppingCartService)
+    public ShoppingCartSummary(ShoppingCart shoppingCart)
     {
-        _shoppingCartService = shoppingCartService;
+        _shoppingCart = shoppingCart;
     }
 
-    public IViewComponentResult Invoke()
+    public async Task<IViewComponentResult> InvokeAsync()
     {
-        var items = _shoppingCartService.GetShoppingCartItems();
+        var items = await _shoppingCart.GetShoppingCartItemsAsync();
+        _shoppingCart.ShoppingCartItems = items;
 
-        var shoppingCartViewModel = new ShoppingCartViewModel
-        {
-            ShoppingCartItems = items,
-            ShoppingCartTotal = _shoppingCartService.GetShoppingCartTotal()
-        };
+        var shoppingCartItemCount = items?.Count ?? 0;
 
-        return View(shoppingCartViewModel);
+        return View(shoppingCartItemCount); // returning an int
     }
 }

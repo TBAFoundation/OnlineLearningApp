@@ -5,9 +5,11 @@ namespace OnlineLearningApp;
 
 public class Order
 {
-    public int Id { get; set; }  
+    public int Id { get; set; }
     [Required]
-    public int AccountId { get; set; } // Changed from string UserId to int AccountId
+    public string Email { get; set; } = default!;
+    [Required]
+    public string AccountId { get; set; } = default!;
     [Required]
     public DateTime OrderDate { get; set; }
     [Required]

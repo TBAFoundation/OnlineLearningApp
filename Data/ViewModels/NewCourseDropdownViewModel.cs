@@ -15,6 +15,6 @@ public class NewCourseDropdownViewModel
 }
 public class User
 {
-    public int UserId { get; set; }
+    public string UserId { get; set; } = default!;
     public string FullName { get; set; } = default!;
 }

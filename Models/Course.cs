@@ -20,7 +20,7 @@ public class Course : IEntityBase
     // Navigation properties
     public virtual ICollection<Module> Modules { get; set; } = new List<Module>();
     public virtual ICollection<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
-    public int InstructorId { get; set; }
+    public string InstructorId { get; set; } = default!;
     [ForeignKey("InstructorId")]
     public virtual Account Instructor { get; set; } = default!;
     public ICollection<Course_Module> Courses_Modules { get; set; } = new List<Course_Module>();

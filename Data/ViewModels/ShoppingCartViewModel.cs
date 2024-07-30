@@ -1,4 +1,6 @@
 ﻿
+using OnlineLearningApp.Data.Cart;
+
 namespace OnlineLearningApp;
 
 public class ShoppingCartViewModel

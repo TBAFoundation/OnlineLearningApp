@@ -49,7 +49,7 @@ public class CourseController : Controller
         var courseDropdownsData = await _service.GetNewCourseDropdownsValues();
 
         ViewBag.Categories = new SelectList(courseDropdownsData.Categories, "Id", "Name");
-        ViewBag.Instructors = new SelectList(courseDropdownsData.Instructors, "Id", "FullName");
+        ViewBag.Instructors = new SelectList(courseDropdownsData.Instructors, "UserId", "FullName");
 
         return View();
     }
@@ -62,11 +62,10 @@ public class CourseController : Controller
             var courseDropdownsData = await _service.GetNewCourseDropdownsValues();
 
             ViewBag.Categories = new SelectList(courseDropdownsData.Categories, "Id", "Name");
-            ViewBag.Instructors = new SelectList(courseDropdownsData.Instructors, "Id", "FullName");
+            ViewBag.Instructors = new SelectList(courseDropdownsData.Instructors, "UserId", "FullName");
 
             return View(course);
         }
-
         await _service.AddNewCourseAsync(course);
         return RedirectToAction(nameof(Index));
     }

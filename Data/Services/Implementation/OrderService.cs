@@ -11,36 +11,39 @@ public class OrderService : IOrderService
     {
         _context = context;
     }
-
-    public async Task<Order> GetOrderByIdAsync(int id)
+    public async Task<List<Order>> GetOrdersByUserIdAndRoleAsync(string userId, string userRole)
     {
-        return await _context.Orders.FindAsync(id);
+        var orders = await _context.Orders.Include(n => n.OrderItems).ThenInclude(n => n.Course).Include(n => n.Account).ToListAsync();
+
+        if (userRole != "Admin")
+        {
+            orders = orders.Where(n => n.AccountId.ToString() == userId).ToList();
+        }
+
+        return orders;
     }
 
-    public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+    public async Task StoreOrderAsync(List<ShoppingCartItem> items, string userId, string userEmailAddress)
     {
-        return await _context.Orders.ToListAsync();
-    }
-
-    public async Task CreateOrderAsync(Order order)
-    {
+        var order = new Order()
+        {
+            AccountId = userId,
+            Email = userEmailAddress
+        };
         await _context.Orders.AddAsync(order);
         await _context.SaveChangesAsync();
-    }
 
-    public async Task UpdateOrderAsync(Order order)
-    {
-        _context.Orders.Update(order);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task DeleteOrderAsync(int id)
-    {
-        var order = await _context.Orders.FindAsync(id);
-        if (order != null)
+        foreach (var item in items)
         {
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
+            var orderItem = new OrderItem()
+            {
+                Amount = item.Amount,
+                CourseId = item.Course.Id,
+                OrderId = order.Id,
+                Price = item.Course.Price
+            };
+            await _context.OrderItems.AddAsync(orderItem);
         }
+        await _context.SaveChangesAsync();
     }
 }

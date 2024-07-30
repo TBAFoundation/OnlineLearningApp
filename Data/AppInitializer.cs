@@ -18,9 +18,9 @@ public class AppInitializer
             // Seed Accounts
             var accounts = new Account[]
             {
-                new Account { Username = "admin", PasswordHash = "admin123", FullName = "Administrator", Email = "admin@example.com", Role = UserRoles.Admin },
-                new Account { Username = "teacher1", PasswordHash = "teacher123", FullName = "Teacher One", Email = "teacher1@example.com", Role = UserRoles.Instructor },
-                new Account { Username = "student1", PasswordHash = "student123", FullName = "Student One", Email = "student1@example.com", Role = UserRoles.Student }
+                new Account { UserId = Guid.NewGuid().ToString(), Username = "admin", PasswordHash = "admin123", FullName = "Administrator", Email = "admin@example.com", Role = UserRoles.Admin },
+                new Account { UserId = Guid.NewGuid().ToString(), Username = "teacher1", PasswordHash = "teacher123", FullName = "Teacher One", Email = "teacher1@example.com", Role = UserRoles.Instructor },
+                new Account { UserId = Guid.NewGuid().ToString(), Username = "student1", PasswordHash = "student123", FullName = "Student One", Email = "student1@example.com", Role = UserRoles.Student }
             };
             foreach (var account in accounts)
             {
@@ -102,7 +102,7 @@ public class AppInitializer
             // Seed Orders
             var orders = new Order[]
             {
-                new Order {Id = accounts[2].UserId, OrderDate = DateTime.Now, TotalAmount = 1200m }
+                new Order { AccountId = accounts[2].UserId, Email = accounts[2].Email, OrderDate = DateTime.Now, TotalAmount = 1200m }
             };
             foreach (var order in orders)
             {

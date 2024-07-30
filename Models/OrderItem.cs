@@ -11,6 +11,7 @@ public class OrderItem
     [Required]
     public Order Order { get; set; } = default!;
     [Required]
+    public int Amount { get; set; }
     public decimal Price { get; set; }
     public int CourseId { get; set; }
     public Course Course { get; set; } = default!;

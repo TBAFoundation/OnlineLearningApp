@@ -2,9 +2,7 @@
 
 public interface IOrderService
 {
-    Task<Order> GetOrderByIdAsync(int id);
-    Task<IEnumerable<Order>> GetAllOrdersAsync();
-    Task CreateOrderAsync(Order order);
-    Task UpdateOrderAsync(Order order);
-    Task DeleteOrderAsync(int id);
+    Task StoreOrderAsync(List<ShoppingCartItem> items, string userId, string userEmailAddress);
+    Task<List<Order>> GetOrdersByUserIdAndRoleAsync(string userId, string userRole);
+ 
 }
