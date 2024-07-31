@@ -85,7 +85,7 @@ public class AccountController : Controller
             await _userManager.AddToRolesAsync(newUser, roles);
 
             await _signInManager.SignInAsync(newUser, isPersistent: false);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("RegisterCompleted");
         }
 
         foreach (var error in newUserResponse.Errors)
@@ -103,4 +103,10 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Index", "Course");
     }
+
+    // Registration completed view
+    public IActionResult RegisterCompleted() => View();
+
+    // Access denied view
+    public IActionResult AccessDenied() => View();
 }

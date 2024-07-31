@@ -35,6 +35,7 @@
                                     <a class="dropdown-item" asp-controller="Course" asp-action="Index"><i class="bi bi-book"></i> Courses</a>
                                     <a class="dropdown-item" asp-controller="Instructor" asp-action="Index"><i class="bi bi-person-square"></i> Instructors</a>
                                     <a class="dropdown-item" asp-controller="Category" asp-action="Index"><i class="bi bi-tags"></i> Categories</a>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Users"><i class="bi bi-people"></i> Users</a>
                                 </div>
                             </li>
                         }
@@ -46,7 +47,25 @@
                     <ul class="navbar-nav">
                         @await Component.InvokeAsync("ShoppingCartSummary")
                     </ul>
-                    <partial name="_Identity" />
+                    <ul class="navbar-nav">
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>
