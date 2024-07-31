@@ -19,22 +19,24 @@ public class AccountController : Controller
         _context = context;
     }
 
+    // Display the list of users
     public async Task<IActionResult> Users()
     {
         var users = await _context.Accounts.ToListAsync();
         return View(users);
     }
 
-
+    // Login View
     public IActionResult Login() => View(new LoginViewModel());
 
+    // Login POST action
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel loginVM)
     {
         if (!ModelState.IsValid) return View(loginVM);
 
-        var user = await _userManager.FindByEmailAsync(loginVM.EmailAddress);
-        if(user != null)
+        var user = await _userManager.FindByEmailAsync(loginVM.Email);
+        if (user != null)
         {
             var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
             if (passwordCheck)
@@ -42,7 +44,7 @@ public class AccountController : Controller
                 var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Movies");
+                    return RedirectToAction("Index", "Course");
                 }
             }
             TempData["Error"] = "Wrong credentials. Please, try again!";
@@ -53,16 +55,17 @@ public class AccountController : Controller
         return View(loginVM);
     }
 
-
+    // Register View
     public IActionResult Register() => View(new RegisterViewModel());
 
+    // Register POST action
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerVM)
     {
         if (!ModelState.IsValid) return View(registerVM);
 
         var user = await _userManager.FindByEmailAsync(registerVM.EmailAddress);
-        if(user != null)
+        if (user != null)
         {
             TempData["Error"] = "This email address is already in use";
             return View(registerVM);
@@ -72,7 +75,7 @@ public class AccountController : Controller
         {
             FullName = registerVM.FullName,
             Email = registerVM.EmailAddress,
-            Username = registerVM.EmailAddress
+            UserName = registerVM.EmailAddress
         };
         var newUserResponse = await _userManager.CreateAsync(newUser, registerVM.Password);
 
@@ -93,6 +96,7 @@ public class AccountController : Controller
         return View(registerVM);
     }
 
+    // Logout POST action
     [HttpPost]
     public async Task<IActionResult> Logout()
     {

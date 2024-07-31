@@ -18,9 +18,9 @@ public class AppInitializer
             // Seed Accounts
             var accounts = new Account[]
             {
-                new Account { UserId = Guid.NewGuid().ToString(), Username = "admin", PasswordHash = "admin123", FullName = "Administrator", Email = "admin@example.com", Role = UserRoles.Admin },
-                new Account { UserId = Guid.NewGuid().ToString(), Username = "teacher1", PasswordHash = "teacher123", FullName = "Teacher One", Email = "teacher1@example.com", Role = UserRoles.Instructor },
-                new Account { UserId = Guid.NewGuid().ToString(), Username = "student1", PasswordHash = "student123", FullName = "Student One", Email = "student1@example.com", Role = UserRoles.Student }
+                new Account { Id = Guid.NewGuid().ToString(), UserName = "admin", PasswordHash = "admin123", FullName = "Administrator", Email = "admin@example.com", Role = UserRoles.Admin },
+                new Account { Id = Guid.NewGuid().ToString(), UserName = "teacher1", PasswordHash = "teacher123", FullName = "Teacher One", Email = "teacher1@example.com", Role = UserRoles.Instructor },
+                new Account { Id = Guid.NewGuid().ToString(), UserName = "student1", PasswordHash = "student123", FullName = "Student One", Email = "student1@example.com", Role = UserRoles.Student }
             };
             foreach (var account in accounts)
             {
@@ -31,11 +31,11 @@ public class AppInitializer
             // Seed Courses
             var courses = new Course[]
             {
-                new Course { CourseName = "Data Science 101", Description = "Introduction to Data Science", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(3), Price = 500m, Category = CourseCategory.DataScience, ImageURL = "datascience101.jpg", InstructorId = accounts[1].UserId },
-                new Course { CourseName = "AI Fundamentals", Description = "Basics of AI", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(3), Price = 700m, Category = CourseCategory.AI, ImageURL = "aifundamentals.jpg", InstructorId = accounts[1].UserId },
-                new Course { CourseName = "Programming with Python", Description = "Learn Python from scratch", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(2), Price = 400m, Category = CourseCategory.Programming, ImageURL = "pythonprogramming.jpg", InstructorId = accounts[1].UserId },
-                new Course { CourseName = "Machine Learning Basics", Description = "Introduction to Machine Learning", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(4), Price = 600m, Category = CourseCategory.MachineLearning, ImageURL = "mlbasics.jpg", InstructorId = accounts[1].UserId },
-                new Course { CourseName = "Advanced Data Science", Description = "Advanced topics in Data Science", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(5), Price = 800m, Category = CourseCategory.DataScience, ImageURL = "advanced_datascience.jpg", InstructorId = accounts[1].UserId }
+                new Course { CourseName = "Data Science 101", Description = "Introduction to Data Science", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(3), Price = 500m, Category = CourseCategory.DataScience, ImageURL = "datascience101.jpg", InstructorId = accounts[1].Id },
+                new Course { CourseName = "AI Fundamentals", Description = "Basics of AI", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(3), Price = 700m, Category = CourseCategory.AI, ImageURL = "aifundamentals.jpg", InstructorId = accounts[1].Id },
+                new Course { CourseName = "Programming with Python", Description = "Learn Python from scratch", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(2), Price = 400m, Category = CourseCategory.Programming, ImageURL = "pythonprogramming.jpg", InstructorId = accounts[1].Id },
+                new Course { CourseName = "Machine Learning Basics", Description = "Introduction to Machine Learning", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(4), Price = 600m, Category = CourseCategory.MachineLearning, ImageURL = "mlbasics.jpg", InstructorId = accounts[1].Id },
+                new Course { CourseName = "Advanced Data Science", Description = "Advanced topics in Data Science", StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(5), Price = 800m, Category = CourseCategory.DataScience, ImageURL = "advanced_datascience.jpg", InstructorId = accounts[1].Id }
             };
             foreach (var course in courses)
             {
@@ -102,7 +102,7 @@ public class AppInitializer
             // Seed Orders
             var orders = new Order[]
             {
-                new Order { AccountId = accounts[2].UserId, Email = accounts[2].Email, OrderDate = DateTime.Now, TotalAmount = 1200m }
+                new Order { AccountId = accounts[2].Id, Email = accounts[2].Email, OrderDate = DateTime.Now, TotalAmount = 1200m }
             };
             foreach (var order in orders)
             {

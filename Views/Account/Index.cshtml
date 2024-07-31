@@ -10,7 +10,7 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr class="text-center">
-                        <th>@Html.DisplayNameFor(model => model.Username)</th>
+                        <th>@Html.DisplayNameFor(model => model.UserName)</th>
                         <th>@Html.DisplayNameFor(model => model.FullName)</th>
                         <th>@Html.DisplayNameFor(model => model.Email)</th>
                         <th>@Html.DisplayNameFor(model => model.Role)</th>
@@ -24,16 +24,16 @@
                     @foreach (var item in Model)
                     {
                         <tr class="text-center">
-                            <td>@Html.DisplayFor(modelItem => item.Username)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UserName)</td>
                             <td>@Html.DisplayFor(modelItem => item.FullName)</td>
                             <td>@Html.DisplayFor(modelItem => item.Email)</td>
                             <td>@Html.DisplayFor(modelItem => item.Role)</td>
                             @if (User?.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
                             {
                                 <td>
-                                    <a class="btn btn-outline-primary btn-sm" asp-action="Edit" asp-route-id="@item.UserId"><i class="bi bi-pencil-square"></i> Edit</a>
-                                    <a class="btn btn-outline-info btn-sm" asp-action="Details" asp-route-id="@item.UserId"><i class="bi bi-eye"></i> Details</a>
-                                    <a class="btn btn-danger btn-sm text-white" asp-action="Delete" asp-route-id="@item.UserId"><i class="bi bi-trash"></i> Delete</a>
+                                    <a class="btn btn-outline-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i> Edit</a>
+                                    <a class="btn btn-outline-info btn-sm" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-eye"></i> Details</a>
+                                    <a class="btn btn-danger btn-sm text-white" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i> Delete</a>
                                 </td>
                             }
                         </tr>

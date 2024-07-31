@@ -58,7 +58,7 @@ public class CourseService : EntityBaseRepository<Course>, ICourseService
 
         var instructors = accounts.Select(a => new User
         {
-            UserId = a.UserId,
+            UserId = a.Id,
             FullName = a.FullName
         }).ToList();
 

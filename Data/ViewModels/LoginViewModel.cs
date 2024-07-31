@@ -4,12 +4,9 @@ namespace OnlineLearningApp;
 
 public class LoginViewModel
 {
-    [Display(Name = "Username")]
-    public string Username { get; set; } = default!;
-    
-    [Display(Name = "Email address")]
-    [Required(ErrorMessage = "Email address is required")]
-    public string EmailAddress { get; set; } = default!;
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = default!;
 
     [Required]
     [DataType(DataType.Password)]
