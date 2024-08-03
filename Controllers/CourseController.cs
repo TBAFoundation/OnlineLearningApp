@@ -44,6 +44,7 @@ public class CourseController : Controller
     }
 
     // GET: Courses/Create
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> Create()
     {
         var courseDropdownsData = await _service.GetNewCourseDropdownsValues();
@@ -55,6 +56,7 @@ public class CourseController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> Create(NewCourseViewModel course)
     {
         if (!ModelState.IsValid)
@@ -71,6 +73,7 @@ public class CourseController : Controller
     }
 
     // GET: Courses/Edit/1
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> Edit(int id)
     {
         var courseDetails = await _service.GetCourseByIdAsync(id);
@@ -98,6 +101,7 @@ public class CourseController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> Edit(int id, NewCourseViewModel course)
     {
         if (id != course.Id) return View("NotFound");

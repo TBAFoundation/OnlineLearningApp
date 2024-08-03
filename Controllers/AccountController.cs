@@ -44,7 +44,18 @@ public class AccountController : Controller
                 var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Course");
+                    if (await _userManager.IsInRoleAsync(user, UserRoles.Admin))
+                    {
+                        return RedirectToAction("Index", "Course");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, UserRoles.Instructor))
+                    {
+                        return RedirectToAction("Dashboard", "Instructor");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, UserRoles.Student))
+                    {
+                        return RedirectToAction("Dashboard", "Student");
+                    }
                 }
             }
             TempData["Error"] = "Wrong credentials. Please, try again!";
@@ -81,7 +92,7 @@ public class AccountController : Controller
 
         if (newUserResponse.Succeeded)
         {
-            var roles = new List<string> { UserRoles.Admin, UserRoles.Instructor, UserRoles.Student };
+            var roles = new List<string> { UserRoles.Student }; // Default role is Student
             await _userManager.AddToRolesAsync(newUser, roles);
 
             await _signInManager.SignInAsync(newUser, isPersistent: false);
