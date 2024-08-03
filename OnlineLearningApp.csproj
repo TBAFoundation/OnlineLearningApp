@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Account\Login.cshtml" />
     <Content Remove="Views\Account\RegisterCompleted.cshtml" />
     <Content Remove="Views\Course\Create.cshtml" />
     <Content Remove="Views\Course\Delete.cshtml" />
@@ -38,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Account\Login.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Account\RegisterCompleted.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Course\Create.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Course\Delete.cshtml" />
@@ -46,7 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Account\Login.cshtml" />
     <None Include="Views\Account\RegisterCompleted.cshtml" />
     <None Include="Views\Course\Create.cshtml" />
     <None Include="Views\Course\Delete.cshtml" />
@@ -61,10 +58,6 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Course\Delete.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Account\Login.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
