@@ -27,11 +27,11 @@ public class AccountController : Controller
     }
 
     // Login View
-    public IActionResult Login() => View(new LoginViewModel());
+    public IActionResult SignIn() => View(new LoginViewModel());
 
     // Login POST action
     [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel loginVM)
+    public async Task<IActionResult> SignIn(LoginViewModel loginVM)
     {
         if (!ModelState.IsValid) return View(loginVM);
 
