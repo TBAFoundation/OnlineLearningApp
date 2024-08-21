@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineLearningApp.Data;
 using OnlineLearningApp.Models;
+using System.Diagnostics;
 
 namespace OnlineLearningApp.Controllers;
 
@@ -35,31 +36,38 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid) return View(loginVM);
 
+        // Check if user exists
         var user = await _userManager.FindByEmailAsync(loginVM.Email);
-        if (user != null)
+        if (user == null)
         {
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, loginVM.Password, false, false);
-            if (result.Succeeded)
-            {
-                // Redirect based on user role
-                if (await _userManager.IsInRoleAsync(user, "Admin"))
-                {
-                    return RedirectToAction("Index", "Course");
-                }
-                else if (await _userManager.IsInRoleAsync(user, "Instructor"))
-                {
-                    return RedirectToAction("InstructorDashboard", "Instructor");
-                }
-                else if (await _userManager.IsInRoleAsync(user, "Student"))
-                {
-                    return RedirectToAction("StudentDashboard", "Student");
-                }
-            }
-            TempData["Error"] = "Wrong credentials. Please, try again!";
+            TempData["Error"] = "User not found. Please, try again!";
             return View(loginVM);
         }
 
-        TempData["Error"] = "Wrong credentials. Please, try again!";
+        // Attempt to sign in
+        var result = await _signInManager.PasswordSignInAsync(user.UserName, loginVM.Password, false, false);
+        if (result.Succeeded)
+        {
+            // Redirect based on user role
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                return RedirectToAction("Index", "Course");
+            }
+            else if (await _userManager.IsInRoleAsync(user, "Instructor"))
+            {
+                return RedirectToAction("InstructorDashboard", "Instructor");
+            }
+            else if (await _userManager.IsInRoleAsync(user, "Student"))
+            {
+                return RedirectToAction("StudentDashboard", "Student");
+            }
+        }
+        else
+        {
+            TempData["Error"] = "Wrong credentials. Please, try again!";
+            Debug.WriteLine($"Login failed for user {loginVM.Email}. Result: {result}");
+        }
+
         return View(loginVM);
     }
 
@@ -72,6 +80,7 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid) return View(registerVM);
 
+        // Check if email is already registered
         var user = await _userManager.FindByEmailAsync(registerVM.EmailAddress);
         if (user != null)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OnlineLearningApp.Models;
 
 namespace OnlineLearningApp.Data;
@@ -16,11 +17,37 @@ public class AppInitializer
             }
 
             // Seed Accounts
+            var hasher = new PasswordHasher<Account>();
+
             var accounts = new Account[]
             {
-                new Account { Id = Guid.NewGuid().ToString(), UserName = "admin", PasswordHash = "admin123", FullName = "Administrator", Email = "admin@example.com", Role = UserRoles.Admin },
-                new Account { Id = Guid.NewGuid().ToString(), UserName = "teacher1", PasswordHash = "teacher123", FullName = "Teacher One", Email = "teacher1@example.com", Role = UserRoles.Instructor },
-                new Account { Id = Guid.NewGuid().ToString(), UserName = "student1", PasswordHash = "student123", FullName = "Student One", Email = "student1@example.com", Role = UserRoles.Student }
+            new Account
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = "admin",
+                PasswordHash = hasher.HashPassword(null, "admin123"),
+                FullName = "Administrator",
+                Email = "admin@example.com",
+                Role = UserRoles.Admin
+            },
+            new Account
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = "Instructor1",
+                PasswordHash = hasher.HashPassword(null, "instructor123"),
+                FullName = "Instructor",
+                Email = "instructor1@example.com",
+                Role = UserRoles.Instructor
+            },
+            new Account
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = "student1",
+                PasswordHash = hasher.HashPassword(null, "student123"),
+                FullName = "Student One",
+                Email = "student1@example.com",
+                Role = UserRoles.Student
+            }
             };
             foreach (var account in accounts)
             {
