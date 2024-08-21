@@ -27,7 +27,8 @@ public class CourseController : Controller
 
         if (!string.IsNullOrEmpty(searchString))
         {
-            var filteredResultNew = allCourses.Where(n => string.Equals(n.CourseName, searchString, System.StringComparison.CurrentCultureIgnoreCase) || string.Equals(n.Description, searchString, System.StringComparison.CurrentCultureIgnoreCase)).ToList();
+            var filteredResultNew = allCourses.Where(n => n.CourseName.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+                            || n.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
 
             return View("Index", filteredResultNew);
         }
@@ -40,6 +41,10 @@ public class CourseController : Controller
     public async Task<IActionResult> Details(int id)
     {
         var courseDetail = await _service.GetCourseByIdAsync(id);
+        if (courseDetail == null)
+        {
+            return View("NotFound");
+        }
         return View(courseDetail);
     }
 

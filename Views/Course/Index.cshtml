@@ -5,44 +5,33 @@
 }
 
 <div class="container mt-4">
-    <h1 class="text-center">@ViewData["Title"]</h1>
-    <div class="row">
-        @foreach (var item in Model)
+    <h2 class="text-center mb-4">Courses</h2>
+
+    <!-- Search Bar -->
+    <div class="mb-4">
+        <form asp-action="Filter" method="get" class="form-inline d-flex justify-content-center">
+            <input type="text" name="searchString" class="form-control mr-2" placeholder="Search for a course..." />
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var course in Model)
         {
-            <div class="col-md-4 col-sm-6 mb-4">
+            <div class="col">
                 <div class="card h-100">
-                    <img src="@item.ImageURL" class="card-img-top" alt="@item.CourseName">
+                    <img src="@course.ImageURL" class="card-img-top" alt="@course.CourseName">
                     <div class="card-body">
-                        <h5 class="card-title">
-                            @item.CourseName
-                            @if (User?.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
-                            {
-                                <a class="text-primary float-right" asp-action="Edit" asp-route-id="@item.CourseId" title="Edit"><i class="bi bi-pencil-square"></i></a>
-                            }
-                        </h5>
-                        <p class="card-text">@item.Description</p>
-                        <p class="card-text"><strong>Category:</strong> @item.Category</p>
-                        <p class="card-text"><strong>Start Date:</strong> @item.StartDate.ToString("dd MMM yy")</p>
-                        <p class="card-text"><strong>End Date:</strong> @item.EndDate.ToString("dd MMM yy")</p>
-                        <p class="card-text">
-                            <strong>Status:</strong>
-                            @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate)
-                            {
-                                <span class="badge badge-success">AVAILABLE COURSE</span>
-                            }
-                            else if (DateTime.Now > item.EndDate)
-                            {
-                                <span class="badge badge-danger">ENROLLMENT EXPIRED</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-primary">UPCOMING COURSE</span>
-                            }
-                        </p>
+                        <h5 class="card-title">@course.CourseName</h5>
+                        <p class="card-text">@course.Description</p>
+                        <p><strong>Category:</strong> @course.Category</p>
+                        <p><strong>Start Date:</strong> @course.StartDate.ToString("dd MMM yy")</p>
+                        <p><strong>End Date:</strong> @course.EndDate.ToString("dd MMM yy")</p>
+                        <p><strong>Status:</strong> @course.Status</p>
                     </div>
-                    <div class="card-footer">
-                        <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.CourseId"><i class="bi bi-eye-fill"></i> Show Details</a>
-                        <a class="btn btn-success text-white @((DateTime.Now > item.EndDate) ? "disabled" : "")" asp-action="Enroll" asp-route-id="@item.CourseId"><i class="bi bi-person-plus"></i> Enroll Now</a>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="@Url.Action("Details", "Course", new { id = course.Id })" class="btn btn-primary">Show Details</a>
+                        <a href="#" class="btn btn-success">Enroll Now</a>
                     </div>
                 </div>
             </div>

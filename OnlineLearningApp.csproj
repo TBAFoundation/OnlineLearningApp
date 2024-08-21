@@ -15,7 +15,6 @@
     <Content Remove="Views\Account\RegisterCompleted.cshtml" />
     <Content Remove="Views\Course\Create.cshtml" />
     <Content Remove="Views\Course\Delete.cshtml" />
-    <Content Remove="Views\Course\Details.cshtml" />
     <Content Remove="Views\Course\Edit.cshtml" />
   </ItemGroup>
 
@@ -47,7 +46,6 @@
     <None Include="Views\Account\RegisterCompleted.cshtml" />
     <None Include="Views\Course\Create.cshtml" />
     <None Include="Views\Course\Delete.cshtml" />
-    <None Include="Views\Course\Details.cshtml" />
     <None Include="Views\Course\Edit.cshtml" />
     <None Include="Views\Shared\Components\ShoppingCartSummary\Default.cshtml" />
   </ItemGroup>

@@ -1,3 +1,4 @@
+using OnlineLearningApp.Data;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,7 @@ public class Course : IEntityBase
     public DateTime EndDate { get; set; }
     public decimal Price { get; set; }
     public string ImageURL { get; set; } = default!;
+    public CourseStatus Status { get; set; } /*= CourseStatus.Upcoming;*/
 
 
     // Navigation properties

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/jmGscEcZE8=",
+  "dgSpecHash": "oThWEcu4pi8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\USER\\Desktop\\MGQS Projects\\OnlineLearningApp\\OnlineLearningApp.csproj",
+  "projectFilePath": "C:\\Users\\USER\\Desktop\\TahirDoc\\MGQSProjects\\OnlineLearningApp\\OnlineLearningApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\bouncycastle.cryptography\\2.3.1\\bouncycastle.cryptography.2.3.1.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\google.protobuf\\3.26.1\\google.protobuf.3.26.1.nupkg.sha512",
@@ -146,5 +146,12 @@
     "C:\\Users\\USER\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\zstdsharp.port\\0.8.0\\zstdsharp.port.0.8.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
+    }
+  ]
 }

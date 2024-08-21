@@ -38,24 +38,21 @@ public class AccountController : Controller
         var user = await _userManager.FindByEmailAsync(loginVM.Email);
         if (user != null)
         {
-            var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
-            if (passwordCheck)
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, loginVM.Password, false, false);
+            if (result.Succeeded)
             {
-                var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
-                if (result.Succeeded)
+                // Redirect based on user role
+                if (await _userManager.IsInRoleAsync(user, "Admin"))
                 {
-                    if (await _userManager.IsInRoleAsync(user, UserRoles.Admin))
-                    {
-                        return RedirectToAction("Index", "Course");
-                    }
-                    else if (await _userManager.IsInRoleAsync(user, UserRoles.Instructor))
-                    {
-                        return RedirectToAction("Dashboard", "Instructor");
-                    }
-                    else if (await _userManager.IsInRoleAsync(user, UserRoles.Student))
-                    {
-                        return RedirectToAction("Dashboard", "Student");
-                    }
+                    return RedirectToAction("Index", "Course");
+                }
+                else if (await _userManager.IsInRoleAsync(user, "Instructor"))
+                {
+                    return RedirectToAction("InstructorDashboard", "Instructor");
+                }
+                else if (await _userManager.IsInRoleAsync(user, "Student"))
+                {
+                    return RedirectToAction("StudentDashboard", "Student");
                 }
             }
             TempData["Error"] = "Wrong credentials. Please, try again!";
@@ -92,7 +89,7 @@ public class AccountController : Controller
 
         if (newUserResponse.Succeeded)
         {
-            var roles = new List<string> { UserRoles.Student }; // Default role is Student
+            var roles = new List<string> { UserRoles.Admin, UserRoles.Instructor, UserRoles.Student };
             await _userManager.AddToRolesAsync(newUser, roles);
 
             await _signInManager.SignInAsync(newUser, isPersistent: false);
