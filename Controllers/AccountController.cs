@@ -44,8 +44,8 @@ public class AccountController : Controller
             return View(loginVM);
         }
 
-        // Attempt to sign in
-        var result = await _signInManager.PasswordSignInAsync(user.UserName, loginVM.Password, false, false);
+        // Attempt to sign in using the email (assuming username is the email)
+        var result = await _signInManager.PasswordSignInAsync(loginVM.Email, loginVM.Password, false, false);
         if (result.Succeeded)
         {
             // Redirect based on user role
