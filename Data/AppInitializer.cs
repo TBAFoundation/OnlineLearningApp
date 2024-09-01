@@ -20,35 +20,35 @@ public class AppInitializer
             var hasher = new PasswordHasher<Account>();
 
             var accounts = new Account[]
-            {
-            new Account
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserName = "admin",
-                PasswordHash = hasher.HashPassword(null, "admin123"),
-                FullName = "Administrator",
-                Email = "admin@example.com",
-                Role = UserRoles.Admin
-            },
-            new Account
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserName = "Instructor1",
-                PasswordHash = hasher.HashPassword(null, "instructor123"),
-                FullName = "Instructor",
-                Email = "instructor1@example.com",
-                Role = UserRoles.Instructor
-            },
-            new Account
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserName = "student1",
-                PasswordHash = hasher.HashPassword(null, "student123"),
-                FullName = "Student One",
-                Email = "student1@example.com",
-                Role = UserRoles.Student
-            }
-            };
+          {
+                new Account
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserName = "admin",
+                    PasswordHash = hasher.HashPassword(null, "admin123"),
+                    FullName = "Administrator",
+                    Email = "admin@example.com",
+                    Role = UserRoles.Admin
+                },
+                new Account
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserName = "Instructor1",
+                    PasswordHash = hasher.HashPassword(null, "instructor123"),
+                    FullName = "Instructor One",
+                    Email = "instructor1@example.com",
+                    Role = UserRoles.Instructor
+                },
+                new Account
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserName = "student1",
+                    PasswordHash = hasher.HashPassword(null, "student123"),
+                    FullName = "Student One",
+                    Email = "student1@example.com",
+                    Role = UserRoles.Student
+                }
+          };
             foreach (var account in accounts)
             {
                 context.Accounts.Add(account);

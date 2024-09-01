@@ -217,6 +217,7 @@ namespace OnlineLearningApp.Migrations
                     Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     ImageURL = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     InstructorId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },

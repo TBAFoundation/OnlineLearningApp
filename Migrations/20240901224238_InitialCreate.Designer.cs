@@ -12,8 +12,8 @@ using OnlineLearningApp.Data;
 namespace OnlineLearningApp.Migrations
 {
     [DbContext(typeof(OnlineLearningAppDbContext))]
-    [Migration("20240822184213_UpdateAccountSchema")]
-    partial class UpdateAccountSchema
+    [Migration("20240901224238_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

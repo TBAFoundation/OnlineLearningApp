@@ -36,8 +36,8 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid) return View(loginVM);
 
-        // Check if user exists
-        var user = await _userManager.FindByEmailAsync(loginVM.Email);
+        // Check if user exists by UserName
+        var user = await _userManager.FindByNameAsync(loginVM.Email);
         if (user == null)
         {
             TempData["Error"] = "User not found. Please, try again!";
@@ -45,7 +45,7 @@ public class AccountController : Controller
         }
 
         // Attempt to sign in using the email (assuming username is the email)
-        var result = await _signInManager.PasswordSignInAsync(loginVM.Email, loginVM.Password, false, false);
+        var result = await _signInManager.PasswordSignInAsync(user.UserName, loginVM.Password, false, false);
         if (result.Succeeded)
         {
             // Redirect based on user role

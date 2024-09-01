@@ -23,18 +23,20 @@ public class CourseController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Filter(string searchString)
     {
-        var allCourses = await _service.GetAllAsync(n => n.Category);
+        var allCourses = await _service.GetAllAsync(); // No need to use Include here
 
         if (!string.IsNullOrEmpty(searchString))
         {
-            var filteredResultNew = allCourses.Where(n => n.CourseName.Contains(searchString, StringComparison.OrdinalIgnoreCase)
-                            || n.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+            var filteredResultNew = allCourses.Where(n =>
+                string.Equals(n.CourseName, searchString, StringComparison.CurrentCultureIgnoreCase) ||
+                string.Equals(n.Description, searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
             return View("Index", filteredResultNew);
         }
 
         return View("Index", allCourses);
     }
+
 
     // GET: Courses/Details/1
     [AllowAnonymous]

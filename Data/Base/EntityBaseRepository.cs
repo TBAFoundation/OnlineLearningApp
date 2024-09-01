@@ -21,7 +21,12 @@ public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class,
     public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
     {
         IQueryable<T> query = _context.Set<T>();
-        query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+
+        foreach (var includeProperty in includeProperties)
+        {
+            query = query.Include(includeProperty);
+        }
+
         return await query.ToListAsync();
     }
 
@@ -30,9 +35,7 @@ public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class,
         var entity = await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
         if (entity == null)
         {
-            // Handle the case where the entity is not found
-            // You can return a default value or throw an exception
-            throw new Exception($"Entity with id {id} not found.");
+            throw new KeyNotFoundException($"Entity with id {id} not found.");
         }
         return entity;
     }
@@ -56,6 +59,10 @@ public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class,
         {
             _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new KeyNotFoundException($"Entity with id {id} not found.");
         }
     }
 }
